@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQL Chat Interface</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+        }
+        .chat-block {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .question {
+            font-weight: bold;
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.4rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ask your Database</h1>
+
+    <form method="post">
+        <input type="text" name="question" placeholder="Enter your query..." style="width:70%; padding:0.5rem;" required>
+        <button type="submit" style="padding:0.5rem 1rem;">Ask</button>
+    </form>
+
+    <hr>
+
+    {% for chat in chat_history %}
+    <div class="chat-block">
+        <div class="question">Q: {{ chat.question }}</div>
+
+        {% if chat.type == 'table' %}
+            <table>
+                <thead>
+                    <tr>
+                        {% for key in chat.answer[0].keys() %}
+                        <th>{{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in chat.answer %}
+                    <tr>
+                        {% for val in row.values() %}
+                        <td>{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- ✅ Download CSV Button -->
+            <a href="/download_csv" class="download-btn">Download CSV</a>
+
+        {% else %}
+            <div class="answer">{{ chat.answer }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+</body>
+</html>
