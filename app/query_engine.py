@@ -125,4 +125,3 @@ SQLQuery:
 
         return result_dicts, sql_query
 
-        #return db.run(sql_query)
