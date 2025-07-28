@@ -24,7 +24,6 @@ def strip_values_recursive(obj):
     else:
         return ""  # strip leaf values
 
-
 def get_table_description_with_sample(db, table_name):
     try:
         usable_tables = db.get_usable_table_names()

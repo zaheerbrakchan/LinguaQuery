@@ -23,7 +23,6 @@ async def get_ui(request: Request):
 async def post_ui(request: Request, question: str = Form(...)):
     try:
         result = run_query(question)
-
         # Smart format detection: list of dicts = table
         if isinstance(result, list) and all(isinstance(r, dict) for r in result):
             display_type = "table"
