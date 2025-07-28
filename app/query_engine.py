@@ -115,11 +115,14 @@ SQLQuery:
     raw_sql = result.content.strip()
     sql_query = clean_sql_query(raw_sql)
 
+
     # Execute SQL and return results as list of dicts
     with engine.connect() as conn:
         result = conn.execute(text(sql_query))
         columns = result.keys()
         rows = result.fetchall()
-        return [dict(zip(columns, row)) for row in rows]
+        result_dicts = [dict(zip(columns, row)) for row in rows]
 
-    #return db.run(sql_query)
+        return result_dicts, sql_query
+
+        #return db.run(sql_query)

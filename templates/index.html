@@ -7,27 +7,68 @@
         body {
             font-family: Arial, sans-serif;
             padding: 2rem;
+            text-align: center;
         }
-        .chat-block {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
+
+        #form-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
         }
-        .question {
-            font-weight: bold;
-            color: #333;
+
+        input[type="text"] {
+            width: 60%;
+            padding: 0.5rem;
+            font-size: 1rem;
         }
+
+        button[type="submit"] {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            margin-left: 0.5rem;
+            cursor: pointer;
+        }
+
+        #loader {
+            display: none;
+            margin: 2rem auto;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-container {
+            margin-top: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
         table {
             border-collapse: collapse;
             width: 100%;
             margin-top: 0.5rem;
         }
+
         th, td {
             border: 1px solid #aaa;
             padding: 0.5rem;
             text-align: left;
         }
+
         .download-btn, .see-more-btn {
             background-color: #4CAF50;
             color: white;
@@ -36,89 +77,130 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 0.5rem;
-            margin-right: 0.5rem;
+            margin-left: 0.5rem;
         }
+
         .see-more-btn {
             background-color: #0ea5e9;
         }
+
         .see-more-btn:hover {
             background-color: #0284c7;
         }
+
+        .question {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
     </style>
 </head>
 <body>
 
     <h1>Ask your Database</h1>
 
-    <form method="post">
-        <input type="text" name="question" placeholder="Enter your query..." style="width:70%; padding:0.5rem;" required>
-        <button type="submit" style="padding:0.5rem 1rem;">Ask</button>
-    </form>
+    <div id="form-wrapper">
+        <form method="post" id="chat-form" style="display: flex; width: 100%; justify-content: center;">
+            <input type="text" name="question" placeholder="Enter your query..." required>
+            <button type="submit">Ask</button>
+        </form>
+    </div>
 
-    <hr>
+    <div id="loader"></div>
 
-    {% for chat in chat_history %}
-    <div class="chat-block">
-        <div class="question">Q: {{ chat.question }}</div>
+    {% if chat_history|length > 0 %}
+        {% set chat = chat_history[-1] %}
+        <div class="result-container">
+            <div class="question">Q: {{ chat.question }}</div>
 
-        {% if chat.type == 'table' %}
-            <div style="margin-bottom: 5px; font-weight: bold;">
-                Total Rows: {{ chat.answer | length }}
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        {% for key in chat.answer[0].keys() %}
-                        <th>{{ key }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in chat.answer[:3] %}
-                    <tr>
-                        {% for val in row.values() %}
-                        <td>{{ val }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-
-                    {% if chat.answer | length > 3 %}
-                        {% for row in chat.answer[3:] %}
-                        <tr class="extra-row" style="display: none;">
+            {% if chat.type == 'table' %}
+                <div class="table-header">
+                    <div><strong>Total Rows:</strong> {{ chat.answer | length }}</div>
+                    <a href="/download_csv" class="download-btn">Download CSV</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            {% for key in chat.answer[0].keys() %}
+                            <th>{{ key }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in chat.answer[:3] %}
+                        <tr>
                             {% for val in row.values() %}
                             <td>{{ val }}</td>
                             {% endfor %}
                         </tr>
                         {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
 
-            {% if chat.answer | length > 3 %}
-                <button class="see-more-btn" onclick="toggleRows(this)">See More</button>
+                        {% if chat.answer | length > 3 %}
+                            {% for row in chat.answer[3:] %}
+                            <tr class="extra-row" style="display: none;">
+                                {% for val in row.values() %}
+                                <td>{{ val }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                {% if chat.answer | length > 3 %}
+                    <button class="see-more-btn" onclick="toggleRows(this)">See More</button>
+                {% endif %}
+            {% else %}
+                <div class="answer">{{ chat.answer }}</div>
             {% endif %}
+        </div>
+{% if chat.sql %}
+<div style="margin-top: 1.5rem;">
+    <button onclick="toggleSQL()" style="padding: 0.4rem 1rem; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Show SQL Query
+    </button>
+    <pre id="sql-box" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #f8f8f8; border: 1px solid #ccc; border-radius: 5px; color: #333; white-space: pre-wrap;">{{ chat.sql }}</pre>
+</div>
+{% endif %}
+    {% endif %}
 
-            <a href="/download_csv" class="download-btn">Download CSV</a>
 
-        {% else %}
-            <div class="answer">{{ chat.answer }}</div>
-        {% endif %}
-    </div>
-    {% endfor %}
 
-    <script>
-        function toggleRows(button) {
-            const table = button.closest('.chat-block');
-            const rows = table.querySelectorAll('.extra-row');
-            const isHidden = rows[0].style.display === "none";
+<script>
+    function toggleRows(button) {
+        const table = button.closest('.result-container');
+        const rows = table.querySelectorAll('.extra-row');
+        const isHidden = rows[0].style.display === "none";
+        rows.forEach(row => {
+            row.style.display = isHidden ? "table-row" : "none";
+        });
+        button.textContent = isHidden ? "See Less" : "See More";
+    }
 
-            rows.forEach(row => {
-                row.style.display = isHidden ? "table-row" : "none";
-            });
+    const form = document.getElementById("chat-form");
+    const loader = document.getElementById("loader");
 
-            button.textContent = isHidden ? "See Less" : "See More";
+    form.addEventListener("submit", function () {
+        // Show loader
+        loader.style.display = "block";
+
+        // Remove previous result immediately
+        const prevResult = document.querySelector(".result-container");
+        if (prevResult) {
+            prevResult.remove();
         }
-    </script>
+    });
+
+function toggleSQL() {
+    const box = document.getElementById('sql-box');
+    if (box.style.display === "none") {
+        box.style.display = "block";
+    } else {
+        box.style.display = "none";
+    }
+}
+</script>
 
 </body>
 </html>
