@@ -115,7 +115,6 @@ SQLQuery:
     raw_sql = result.content.strip()
     sql_query = clean_sql_query(raw_sql)
 
-
     # Execute SQL and return results as list of dicts
     with engine.connect() as conn:
         result = conn.execute(text(sql_query))

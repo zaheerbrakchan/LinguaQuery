@@ -7,7 +7,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-
 # Load DB connection values from environment
 db_user = os.getenv("DB_USER")
 db_pass = quote_plus(os.getenv("DB_PASSWORD"))
