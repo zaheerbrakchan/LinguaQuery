@@ -157,9 +157,9 @@
         </div>
 {% if chat.sql %}
 <div style="margin-top: 1.5rem;">
-    <button onclick="toggleSQL()" style="padding: 0.4rem 1rem; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        Show SQL Query
-    </button>
+<button onclick="toggleSQL(this)" style="padding: 0.4rem 1rem; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Show SQL Query
+</button>
     <pre id="sql-box" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #f8f8f8; border: 1px solid #ccc; border-radius: 5px; color: #333; white-space: pre-wrap;">{{ chat.sql }}</pre>
 </div>
 {% endif %}
@@ -180,23 +180,39 @@
     const form = document.getElementById("chat-form");
     const loader = document.getElementById("loader");
 
+
     form.addEventListener("submit", function () {
-        // Show loader
-        loader.style.display = "block";
+    loader.style.display = "block";
 
-        // Remove previous result immediately
-        const prevResult = document.querySelector(".result-container");
-        if (prevResult) {
-            prevResult.remove();
-        }
-    });
+    const prevResult = document.querySelector(".result-container");
+    if (prevResult) {
+        prevResult.remove();
+    }
 
-function toggleSQL() {
+    const sqlBox = document.getElementById("sql-box");
+    if (sqlBox) {
+        sqlBox.parentElement.remove();
+    }
+});
+
+
+function toggleSQLd() {
     const box = document.getElementById('sql-box');
     if (box.style.display === "none") {
         box.style.display = "block";
     } else {
         box.style.display = "none";
+    }
+}
+
+function toggleSQL(button) {
+    const box = document.getElementById('sql-box');
+    if (box.style.display === "none") {
+        box.style.display = "block";
+        button.textContent = "Hide SQL Query";
+    } else {
+        box.style.display = "none";
+        button.textContent = "Show SQL Query";
     }
 }
 </script>
