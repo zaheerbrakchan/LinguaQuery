@@ -50,6 +50,10 @@ def get_table_description_with_sample(db, table_name):
     except Exception as e:
         return f"### Table: {table_name}\n\nError: {str(e)}"
 
+def strip_sample_rows(description: str) -> str:
+    # Remove anything starting from /* to */
+    return re.sub(r'/\*.*?\*/', '', description, flags=re.DOTALL)
+
 
 def run_query(question: str):
     print("inside run query ;;; ",question)
@@ -88,7 +92,9 @@ Relevant Table Names (comma-separated):
         get_table_description_with_sample(db, table) for table in detected_tables
     ]
     combined_table_info = "\n\n".join(all_descriptions)
+    combined_table_info=strip_sample_rows(combined_table_info)
 
+    #print("---------- combined_table_info  ::: ",combined_table_info)
     # Step 3: Generate SQL from prompt
     prompt = PromptTemplate(
         input_variables=["question", "table_info"],
