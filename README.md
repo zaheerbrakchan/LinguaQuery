@@ -1,17 +1,22 @@
 # LinqueQuery 🧠🔍
 
-**LinqueQuery** is an open-source project that translates natural language questions into SQL queries using LangChain and LLMs (like OpenAI or Azure OpenAI). Designed to work with structured data from sources like **PostgreSQL**, **MongoDB**, and **Elasticsearch**, LinqueQuery helps non-technical users query complex datasets effortlessly.
+**LinqueQuery** is a full-stack, open-source solution that enables users to query structured databases using natural language. More than just a text-to-SQL converter, LinqueQuery dynamically introspects your database schema, intelligently selects relevant tables, generates accurate SQL, executes the query, and displays the results in an intuitive UI — with an option to download them as CSV.
+
+It is designed to work with diverse structured data sources such as **PostgreSQL**, **MongoDB**, and **Elasticsearch**, making it ideal for business analysts, healthcare teams, and anyone who wants to explore their data without writing complex queries.
+
 
 ---
 
 ## 🚀 Features
 
-- 🗣️ Natural language → SQL conversion
-- 🔗 Supports **PostgreSQL** (MongoDB, ElasticSearch coming soon)
-- 🧠 Powered by **LangChain** + OpenAI / Azure OpenAI
-- ⚡ FastAPI backend for easy deployment
-- 🧩 Extensible for multi-database use cases
-- 🛠️ Easy to plug into dashboards or internal tools
+- 🔍 Natural language to end-to-end query results  
+- 🧠 Dynamic schema introspection to select correct tables/columns  
+- 📄 Auto-generates and runs SQL queries from plain English  
+- 📊 Displays results directly in the UI  
+- ⬇️ CSV download support for query results  
+- 🔗 Supports **PostgreSQL** (MongoDB, ElasticSearch coming soon)  
+- ⚡ FastAPI backend with LangChain + OpenAI / Azure OpenAI  
+- 🧩 Easily extensible to new data sources  
 
 ---
 
