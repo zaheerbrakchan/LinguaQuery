@@ -108,8 +108,11 @@ This project is licensed under the MIT License.
 
 
 🙋 Contact
+
 Zaheer Abass
+
 📧 xaheer3scc@gmail.com
+
 🌐 [LinkedIn](https://www.linkedin.com/in/zaheer-abass-590a31142/)
 
 
