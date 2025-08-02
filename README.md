@@ -1,6 +1,6 @@
 # LinqueQuery 🧠🔍
 
-**LinqueQuery** is a full-stack, open-source solution that enables users to query structured databases using natural language. More than just a text-to-SQL converter, LinqueQuery dynamically introspects your database schema, intelligently selects relevant tables, generates accurate SQL, executes the query, and displays the results in an intuitive UI — with an option to download them as CSV.
+**LinqueQuery** is a full-stack, open-source solution that enables users to query structured databases using natural language. More than just a text-to-SQL converter, LinqueQuery dynamically introspects your database schema, intelligently selects relevant tables, generates accurate SQL, executes the query, and displays the results in an intuitive UI  with an option to download them as CSV.
 
 It is designed to work with diverse structured data sources such as **PostgreSQL**, **MongoDB**, and **Elasticsearch**, making it ideal for business analysts, healthcare teams, and anyone who wants to explore their data without writing complex queries.
 
