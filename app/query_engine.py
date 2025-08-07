@@ -94,6 +94,7 @@ Relevant Table Names (comma-separated):
     combined_table_info = "\n\n".join(all_descriptions)
     combined_table_info=strip_sample_rows(combined_table_info)
 
+
     #print("---------- combined_table_info  ::: ",combined_table_info)
     # Step 3: Generate SQL from prompt
     prompt = PromptTemplate(
